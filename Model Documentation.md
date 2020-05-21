@@ -10,6 +10,21 @@ Although the decision making part is the first part in the code, the path genera
 
 ## Path Generation
 
+Path is generated for 50 time steps, using spline interpolation.
+
+### Waypoint Settings
+
+In the path generation step, we use spline interpolation with setting proper waypoints. The selected waypoints are:
+
+* Last position and second last position of the previous remaining path data (which has length 45~49 time steps).
+* 
+
+### Spline Interpolation
+
+
+
+### Final Path Update (concatenation)
+
 
 
 ## Decision Making
