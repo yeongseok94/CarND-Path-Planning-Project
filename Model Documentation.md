@@ -8,6 +8,11 @@ The whole procedure consists of two big steps:
 
 Although the decision making part is the first part in the code, the path generation part will be described first since it is the baseline code.
 
+[//]: # (Image References)
+
+[video1]: ./fullvideo.mp4 "fullvideo"
+[video2]: ./highlight.mp4 "highlight"
+
 ## Path Generation
 
 Path is generated for 50 time steps, using spline interpolation.
@@ -16,15 +21,19 @@ Path is generated for 50 time steps, using spline interpolation.
 
 In the path generation step, we use spline interpolation with setting proper waypoints. The selected waypoints are:
 
-* Last position and second last position of the previous remaining path data (which has length 45~49 time steps).
-* 
+* Last position and second last position of the previous remaining path data (which has length 45~49 time steps). This is to provide tangency with the endpoint of the previous trajectory.
+* 3 points far away from the vehicle: In Frenet coordinate, `(car_s+40, 2+4*lane)`, `(car_s+80, 2+4*lane)`, `(car_s+120, 2+4*lane)` where `car_s` is ego vehicle's current s coordinate and `lane` is target lane.
 
 ### Spline Interpolation
 
+Before we execute spline interpolation to the waypoints, we execute coordinate transform with respect to endpoint of the previous trajectory.
+This is since spline library provided from the project is only available when the points given in ascending order in x-direction.
 
+Then, we execute spline interpolation by creating spline object.
 
 ### Final Path Update (concatenation)
 
+Finally, starting from the endpoint of the previous trajectory, we concatenate the created spline trajectory considering the vehicle's reference speed.
 
 
 ## Decision Making
@@ -62,3 +71,9 @@ The lane change in this code is only available to the adjacent lane.
 If the adjacent lane is marked as empty, then this part of the code changes the target lane.
 Also, to redesign the path appropriate to the lane change so that lane change occur right away,
 we use only first 10 time steps of the previous trajectory so that the path generation part can automatically generate trajectory with corrected targets.
+
+## Result Video
+
+Full simulation video: [Link](./fullvideo.mp4)
+
+Highlight: [Link](./highlight.mp4)
